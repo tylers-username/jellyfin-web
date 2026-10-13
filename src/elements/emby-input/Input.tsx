@@ -7,6 +7,7 @@ import React, {
     forwardRef
 } from 'react';
 
+import globalize from '../../lib/globalize';
 import './emby-input.scss';
 
 interface InputProps
@@ -22,6 +23,10 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     ({ id, label, className, onBlur, onFocus, type, ...props }, ref) => {
         const [isFocused, setIsFocused] = useState(false);
         const [passwordVisible, setPasswordVisible] = useState(false);
+
+        const togglePasswordVisible = useCallback(() => {
+            setPasswordVisible(prev => !prev);
+        }, []);
 
         const onBlurInternal = useCallback(
             (e: React.FocusEvent<HTMLInputElement>) => {
@@ -64,8 +69,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
                         <button
                             type='button'
                             className='emby-input-iconbutton paper-icon-button-light'
-                            onClick={() => setPasswordVisible(prev => !prev)}
-                            aria-label={passwordVisible ? 'Hide password' : 'Show password'}
+                            onClick={togglePasswordVisible}
+                            aria-label={globalize.translate(passwordVisible ? 'HidePassword' : 'ShowPassword')}
+                            aria-controls={id}
                         >
                             <span className='material-icons' aria-hidden='true'>
                                 {passwordVisible ? 'visibility' : 'visibility_off'}

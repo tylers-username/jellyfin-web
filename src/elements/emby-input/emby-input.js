@@ -1,5 +1,6 @@
 import browser from '../../scripts/browser';
 import dom from '../../utils/dom';
+import globalize from '../../lib/globalize';
 import './emby-input.scss';
 import 'webcomponents.js/webcomponents-lite';
 import '../emby-button/paper-icon-button-light';
@@ -60,7 +61,7 @@ EmbyInputPrototype.createdCallback = function () {
         toggleBtn.setAttribute('type', 'button');
         toggleBtn.setAttribute('is', 'paper-icon-button-light');
         toggleBtn.classList.add('emby-input-iconbutton');
-        toggleBtn.setAttribute('aria-label', 'Show password');
+        toggleBtn.setAttribute('aria-controls', this.id);
 
         parentNode.insertBefore(wrapper, this);
         wrapper.appendChild(this);
@@ -69,20 +70,17 @@ EmbyInputPrototype.createdCallback = function () {
         const iconSpan = document.createElement('span');
         iconSpan.classList.add('material-icons');
         iconSpan.setAttribute('aria-hidden', 'true');
-        iconSpan.textContent = 'visibility_off';
         toggleBtn.appendChild(iconSpan);
 
-        dom.addEventListener(toggleBtn, 'click', function () {
-            const input = wrapper.querySelector('input');
-            if (input.type === 'password') {
-                input.type = 'text';
-                iconSpan.textContent = 'visibility';
-                this.setAttribute('aria-label', 'Hide password');
-            } else {
-                input.type = 'password';
-                iconSpan.textContent = 'visibility_off';
-                this.setAttribute('aria-label', 'Show password');
-            }
+        this.setPasswordVisible = visible => {
+            this.setAttribute('type', visible ? 'text' : 'password');
+            iconSpan.textContent = visible ? 'visibility' : 'visibility_off';
+            toggleBtn.setAttribute('aria-label', globalize.translate(visible ? 'HidePassword' : 'ShowPassword'));
+        };
+        this.setPasswordVisible(false);
+
+        dom.addEventListener(toggleBtn, 'click', () => {
+            this.setPasswordVisible(this.type === 'password');
         }, {
             passive: true
         });

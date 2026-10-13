@@ -124,6 +124,7 @@ function onLoginSuccessful(id, accessToken, apiClient, url) {
 }
 
 function showManualForm(context, showCancel, focusPassword) {
+    context.querySelector('#txtManualPassword').setPasswordVisible(false);
     context.querySelector('.chkRememberLogin').checked = appSettings.enableAutoLogin();
     context.querySelector('.manualLoginForm').classList.remove('hide');
     context.querySelector('.visualLoginForm').classList.add('hide');
@@ -215,6 +216,7 @@ export default function (view, params) {
     }
 
     function showVisualForm() {
+        view.querySelector('#txtManualPassword').setPasswordVisible(false);
         view.querySelector('.visualLoginForm').classList.remove('hide');
         view.querySelector('.manualLoginForm').classList.add('hide');
         view.querySelector('.btnManual').classList.remove('hide');
@@ -247,6 +249,7 @@ export default function (view, params) {
         }
     });
     view.querySelector('.manualLoginForm').addEventListener('submit', function (e) {
+        view.querySelector('#txtManualPassword').setPasswordVisible(false);
         appSettings.enableAutoLogin(view.querySelector('.chkRememberLogin').checked);
         authenticateUserByName(view, getApiClient(), getTargetUrl(), view.querySelector('#txtManualName').value, view.querySelector('#txtManualPassword').value);
         e.preventDefault();
@@ -319,6 +322,7 @@ export default function (view, params) {
         });
     });
     view.addEventListener('viewhide', function () {
+        view.querySelector('#txtManualPassword').setPasswordVisible(false);
         libraryMenu.setTransparentMenu(false);
     });
 }

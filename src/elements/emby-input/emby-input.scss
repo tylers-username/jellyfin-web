@@ -94,3 +94,8 @@
     right: auto;
     left: 0;
 }
+
+[dir="rtl"] .emby-password-input-wrapper input.emby-input {
+    padding-right: 0.25em;
+    padding-left: 2.5em;
+}
